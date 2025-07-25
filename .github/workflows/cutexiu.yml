@@ -1,0 +1,28 @@
+name: Auto Commit
+
+on:
+  schedule:
+    - cron: '0 10 * * *' # Chạy vào 17h chiều mỗi ngày (giờ UTC)
+  workflow_dispatch:
+
+jobs:
+  auto-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Chạy script tự động (ví dụ)
+        run: |
+          echo "$(date)" >> auto-commit-log.txt
+
+      - name: Thiết lập Git config (dùng tài khoản của bạn)
+        run: |
+          git config user.name "suongbanhbeo"
+          git config user.email "phanngocsuong357@gmail.com"
+
+      - name: Commit thay đổi nếu có
+        run: |
+          git add .
+          git diff --cached --quiet || git commit -m "Auto commit: $(date '+%Y-%m-%d %H:%M:%S')"
+          git push
